@@ -1,4 +1,4 @@
 Rosalind
 ========
 
-Solving Rosalind problems with Haskell
+We will solve Rosalind problems using Haskell.
