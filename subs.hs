@@ -14,5 +14,14 @@ findSubStr s t curpos pos
 s = "GATATATGCATATACTT"
 t = "ATAT"
 
+printElements [] = putStrLn ""
+printElements (x:xs) = do 
+    putStr (show x++" ")
+    printElements xs
+
 main = do
-    print $ findSubStr s t 1 []
+    file <- readFile "rosalind_subs.txt"
+    let
+        input   = lines file
+        res     = findSubStr (input!!0) (input!!1) 1 []
+    printElements res
