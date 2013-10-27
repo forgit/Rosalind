@@ -6,16 +6,7 @@ Return: A consensus string and profile matrix for the collection.
 (If several possible consensus strings exist, 
 then you may return any one of them.)
 -}
-
-splitStr []     = ""
-splitStr [x]    = [x]
-splitStr [x,y]  = [x,y]
-splitStr (x:y:z:xs)
-    | x `elem` ['C','G','T','A'] && y == '\n' && z `elem` ['C','G','T','A'] = splitStr (x:z:xs)
-    | otherwise     = [x] ++ splitStr (y:z:xs)
-
-formTuple [] = []
-formTuple (x:y:xs) = [(x,y)] ++ formTuple (xs)
+import Fasta (splitStr, formTuple)
 
 removeRosalind [] = []
 removeRosalind ((x,y):xs) = [y] ++ removeRosalind xs
@@ -30,13 +21,6 @@ countChar c (s:str)
 
 addTwoCounts [] [] = []
 addTwoCounts (a:aa) (b:bb) = [a+b] ++ addTwoCounts aa bb
-
-
-printElements [] = putStrLn ""
-printElements (x:xs) = do 
-    putStr (show x++" ")
-    printElements xs
-
 
 formStr c n = [c] ++ ": " ++ (unwords . map show $ n)
 outPut c input = formStr c (makeProfile c input)
