@@ -1,4 +1,4 @@
-module Fasta (splitStr, formTuple) where
+module Fasta (splitStr, formTuple, removeRosalind) where
 
 splitStr []     = ""
 splitStr [x]    = [x]
@@ -9,3 +9,6 @@ splitStr (x:y:z:xs)
 
 formTuple [] = []
 formTuple (x:y:xs) = [(x,y)] ++ formTuple (xs)
+
+removeRosalind [] = []
+removeRosalind ((x,y):xs) = [y] ++ removeRosalind xs
