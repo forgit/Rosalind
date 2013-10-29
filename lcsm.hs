@@ -1,65 +1,38 @@
 import Fasta (splitStr, formTuple, removeRosalind)
 import Data.List
+import Data.Function
+ 
+lcstr xs ys = maximumBy (compare `on` length) . concat $ [f xs' ys | xs' <- tails xs] ++ [f xs ys' | ys' <- drop 1 $ tails ys]
+  where f xs ys = scanl g [] $ zip xs ys
+        g z (x, y) = if x == y then z ++ [x] else []
 
-subStr x y
-    | length x < length y   = subStr' y x
-    | otherwise             = subStr' x y
+commonSubStr xx@(x:xs) = scanl (lcstr) (head xx) (tail xx)
 
-subStr' x [] = ""
-subStr' x yy@(y:ys)
-    | yy `isInfixOf` x      = yy
-    | ys `isInfixOf` x      = ys
-    | inityy `isInfixOf` x  = inityy
-    | otherwise             = subStr' x (init ys)
-    where
-        inityy = init yy
+applyFst x xs = map (lcstr x) xs
 
+apply [] = []
+--apply x = (map (lcstr x) xs) ++ apply xs
+--apply (x:xs) = (map (lcstr x) xs) ++ apply xs
 
-commonSubs' a b
-    | length a < length b   = b `csubs` a
-    | otherwise       = a `csubs` b
-
-
--- s - shorterst string
-test [] s =[]
-test (x:y:ys) s
-    | x=="1" && y=="1" = "" ++ test (ys)
-    | otherwise        = test ys
-
-{-
-    THE LARGEST SET OF ZEROS (IN THE SORTEST STRING) 
-    CORRESPONDS TO COMMON SUBSTRING
--}
--- bb is shorter
-aa `csubs` bb 
-    | na >= nb  = [bb `subs` (take nb aa)] ++ (tail aa `csubs` bb)
-    | otherwise = []
-    where 
-        nb = length bb
-        na = length aa
-
--- if equal length
-[] `subs` [] = ""
-(a:as) `subs` (b:bs) = (a `sub` b) ++ as `subs` bs
-
-a `sub` b
-    | a==b = "0"
-    | otherwise = "1"
-
-
-
---ss xx@(x:xs) yy@(y:ys)
---    | y `isInfixOf` xx = [y] ++ ys
+aaa [] _ = []
+aaa (x:xs) xx = map (lcstr x) (filter (/= x) xx) ++ aaa xs xx
 
 main = do
     input <- readFile "rosalind_lcsm.txt"
     let 
         s   = splitStr input
         tmp = formTuple $ lines s 
-        tmp'= removeRosalind tmp
-    print tmp'
+        tmp'= nub $ removeRosalind tmp
 
-    --print $ subStr "ACGTACGT" "AACCGTATAAAACGT"
-    print $ "AACCGTATAAAACGT" `csubs` "GTATACAACG"
-    print $ commonSubs' "GTATACAACG" "AACCGTATAAAACGT"
+    let 
+        cs = lcstr "GATTACA" "TAGACCA"
+
+    print $ tmp'
+    print $ cs
+    print $ commonSubStr tmp'
+    print $ applyFst (head tmp') (tail tmp')
+    --print $ filter (/= head tmp') tmp'
+    print $ aaa tmp' tmp'
+--    print $ scanl (lcstr) (head tmp') (tail tmp')
+
 
