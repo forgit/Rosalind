@@ -14,6 +14,12 @@ Assume that any two organisms can mate.
 -- fast check if length of list <=n
 fastCheck n = null . drop n
 
+k=2
+m=2
+n=2
+
+factorial n = product [1..n]
+
 
 
 main = do
