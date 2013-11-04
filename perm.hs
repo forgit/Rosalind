@@ -19,10 +19,6 @@ cp xs = [[x]++(filter (/=x) xs)|x<-xs]++[[x]++(filter (/=x) (reverse xs))|x<-xs]
 aa [] = []
 aa (x:xs) = [[x] ++ (filter (/=x) xs)] ++ aa xs
 
-p [] = []
-p (x:xs) = do
-    p xs ++ [x]
-
 
 xor a b = (a+b) `mod` 2
 
