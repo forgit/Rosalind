@@ -8,4 +8,4 @@ main  = do
         n = read (a!!1) :: Int
         s = replicateM n t
 
-    putStrLn $ unlines $ map unwords s
+    putStrLn $ unlines $ map concat s
