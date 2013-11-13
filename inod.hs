@@ -6,4 +6,5 @@ any unrooted binary tree having n leaves.
 -}
 
 main = do
-    print 0
+    readFile "rosalind_inod.txt" >>=
+        print . (\x -> x - 2) . (\x -> read x :: Int)
