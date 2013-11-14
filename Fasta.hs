@@ -1,4 +1,4 @@
-module Fasta (splitStr, formTuple, removeRosalind) where
+module Fasta (splitStr, formTuple, removeRosalind, parse) where
 
 splitStr []     = ""
 splitStr [x]    = [x]
@@ -12,3 +12,10 @@ formTuple (x:y:xs) = [(x,y)] ++ formTuple (xs)
 
 removeRosalind [] = []
 removeRosalind ((x,y):xs) = [y] ++ removeRosalind xs
+
+-- form list of tuples
+parse :: [String] -> [(String,String)]
+parse [] = []
+parse xx = [(head xx, concat x)] ++ parse y
+    where 
+        (x, y) = break ('>' `elem`) $ tail xx
