@@ -14,7 +14,7 @@ d s1 s2 = (sum $ zipWith (comp) s1 s2) / (fromIntegral $ length s1)
 
 create l = [ [d x y | x <- l] | y <- l]
 
-printM t = mapM_ (putStrLn . unwords . map show) t
+printM = mapM_ (putStrLn . unwords . map show)
 
 main = do
     printM . create . map (\(x, y)-> y) . parse . lines =<< readFile "rosalind_pdst.txt"
