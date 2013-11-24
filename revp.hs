@@ -1,11 +1,5 @@
-import Text.Regex.PCRE
-import Data.Array
-import Data.List
-import Fasta
-
-
-getIdx str regx = 
-   nub . concat . map elems $ matchAll (makeRegex regx :: Regex) str
+import Data.List (nub,tails)
+import Fasta (parse, removeRosalind)
 
 revComp = comp . reverse
 comp [] = []
@@ -16,28 +10,25 @@ comp (x:xs)
     | x == 'G'  = ['C'] ++ comp xs
     | otherwise = [x] ++ comp xs    
 
-isEqual [] [] = []
-isEqual (x:xs) (y:ys)
-    | x == y    = "1" ++ isEqual xs ys
-    | otherwise = "0" ++ isEqual xs ys
+printM = mapM_ (putStrLn . (\(x,y) -> show x ++ " " ++ show y))
 
-isPalindrom s = getIdx (isEqual (revComp s) s) "1{4,12}"  -- "11111" of length 4 to 12
+isPalindrom' s = s == revComp s
 
-getpalindrome s a = nub . concat . map (\(x,y) -> (map (\(a,b) -> (a+y+1,b)) x)) $ f
-    where 
-        f = filter (\(x,y) -> not . null $ x) t
-        t = tmp 0 s
-        tmp i s
-            | n >= 4 = [(concat $ map (isPalindrom) (map (\n -> take n s) [4..12]), i)] ++ (tmp (i+1) $ drop 1 s)
-            | otherwise = []
-            where n = length s
+getPalindromes s = 
+    concat $ 
+        map (\(x,y) -> map (\(a,b) -> (x,a)) y) $ 
+            filter (\(x,y) -> not . null $ y) $ 
+                map (\(x,y) -> (x, filter (\(x,y) -> y == True ) y)) $ 
+                    zip [1..] $ map (zip [4..12]) $ 
+                        map (\s -> map (isPalindrom') $ nub (map (\n ->  take n s) [4..12])) cutt
+
+        where
+            t = tails s
+            cutt = take (length t - 4) t
 
 
-s = "TCAATGCATGCGGGTCTATATGCAT"
 
-main = do
-
---    print $ nub $ concat $ map (\(x,y) -> (map (\(a,b) -> (a+y+1,b)) x)) f
-    print $ getpalindrome s (revComp s)
+main = readFile "rosalind_revp.txt" >>= 
+    printM . getPalindromes . head . removeRosalind . parse . lines
 
 
