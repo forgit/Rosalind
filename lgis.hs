@@ -68,6 +68,6 @@ lds d = fst . maximumBy (\(a,b) (x,y) -> compare (length a) (length x)) . fst $ 
 -- TOO SLOW!
 main = do
     readFile "rosalind_lgis.txt" >>=
-        return . map(\s -> read s :: Int) . words . (!!1) . lines >>= \s -> do print 0
+        return . map(\s -> read s :: Int) . words . (!!1) . lines >>= \s -> do
             putStrLn . unwords . map show . lis $ s 
             putStrLn . unwords . map show . lds $ s
